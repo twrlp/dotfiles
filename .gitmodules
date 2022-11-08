@@ -1,12 +1,12 @@
 [submodule "pack/plugins/start/goyo"]
-	path = .vim/pack/plugins/start/goyo
+	path = vim/pack/plugins/start/goyo
 	url = git@github.com:junegunn/goyo.vim.git
 [submodule "pack/plugins/start/vimwiki"]
-	path = .vim/pack/plugins/start/vimwiki
+	path = vim/pack/plugins/start/vimwiki
 	url = git@github.com:vimwiki/vimwiki.git
 [submodule "pack/themes/opt/dracula"]
-	path = .vim/pack/themes/opt/dracula
+	path = vim/pack/themes/opt/dracula
 	url = git@github.com:dracula/vim.git
 [submodule "pack/themes/opt/solarized8"]
-	path = .vim/pack/themes/opt/solarized8
+	path = vim/pack/themes/opt/solarized8
 	url = git@github.com:lifepillar/vim-solarized8.git
