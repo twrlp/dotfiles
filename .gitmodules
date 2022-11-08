@@ -10,3 +10,6 @@
 [submodule "pack/themes/opt/solarized8"]
 	path = vim/pack/themes/opt/solarized8
 	url = git@github.com:lifepillar/vim-solarized8.git
+[submodule "kitty/dracula"]
+	path = kitty/dracula
+	url = git@github.com:dracula/kitty.git
