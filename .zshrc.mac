@@ -1,8 +1,0 @@
-# asdf-vm Setup
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
-
-alias self="vim ~/self/index.md"
-alias todo="vim ~/self/Todo.md"
-alias focus="vim +Goyo"
-alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
-
