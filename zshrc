@@ -12,9 +12,6 @@ bindkey -v
 # Prompt setup
 PROMPT='%c %# '
 
-# Aliases
-alias todo="vim ~/self/Todo.md"
+# Alias-es
 alias please='sudo '
-alias self="vim ~/self/index.md"
-alias todo="vim ~/self/Todo.md"
-alias focus="vim +Goyo"
+
