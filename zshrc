@@ -10,7 +10,7 @@ setopt noautocd
 bindkey -v
 
 # Prompt setup
-PROMPT='%c %# '
+PROMPT='%m:%c %# '
 
 # Alias-es
 alias please='sudo '
