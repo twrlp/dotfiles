@@ -3,6 +3,10 @@ HISTFILE=~/.histfile
 HISTSIZE=2000
 SAVEHIST=2000
 
+# Autocomplete
+autoload -Uz compinit
+compinit
+
 # Require cd to change dirs
 setopt noautocd
 
