@@ -1,0 +1,89 @@
+" ============================================================
+" Plugins (native vim 8 packages — see pack/plugins/start, pack/themes/opt)
+" ============================================================
+" Auto-loaded from pack/*/start: fzf, fzf.vim, vim-lumen, catppuccin.
+
+" ============================================================
+" Plugin settings
+" ============================================================
+let g:fzf_layout = { 'down': '40%' }
+
+" ============================================================
+" Settings
+" ============================================================
+set nocompatible
+filetype plugin indent on
+syntax on
+set hidden
+
+set number
+set relativenumber
+set mouse=a
+if has('clipboard') | set clipboard=unnamed | endif
+
+set undofile
+let s:undodir = expand('~/.cache/vim/undo')
+if !isdirectory(s:undodir) | call mkdir(s:undodir, 'p') | endif
+let &undodir = s:undodir
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set showmatch
+
+set signcolumn=yes
+set updatetime=250
+set scrolloff=3
+set laststatus=2
+set showmode
+set showcmd
+set title
+set backspace=indent,eol,start
+
+set wrap
+set textwidth=120
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set autoindent
+set copyindent
+set noshiftround
+
+set splitright
+set splitbelow
+set termguicolors
+
+" ============================================================
+" Keymaps
+" ============================================================
+nnoremap <Space> <nop>
+let mapleader=" "
+nnoremap j gj
+nnoremap k gk
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fg :Rg<CR>
+nnoremap <leader>fb :Buffers<CR>
+
+" ============================================================
+" Colors + system day/night
+" vim-lumen follows the OS light/dark (via the terminal) and sets &background,
+" firing these User events; we just pick the matching catppuccin flavour.
+" Cross-platform (macOS + Linux).
+" ============================================================
+function! s:ApplyTheme() abort
+  if &background ==# 'light'
+    silent! colorscheme catppuccin_latte
+  else
+    silent! colorscheme catppuccin_mocha
+  endif
+endfunction
+autocmd User LumenLight call s:ApplyTheme()
+autocmd User LumenDark  call s:ApplyTheme()
+autocmd VimEnter * call s:ApplyTheme()
+
+" ============================================================
+" Machine-local extensions (base stays unaware of any local config)
+" ============================================================
+if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif
