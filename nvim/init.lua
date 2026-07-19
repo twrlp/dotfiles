@@ -6,7 +6,6 @@ vim.g.maplocalleader = " "
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"
-vim.opt.clipboard = "unnamedplus"
 vim.opt.breakindent = true
 vim.opt.undofile = true
 vim.opt.ignorecase = true
@@ -18,9 +17,9 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.termguicolors = true
 
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.softtabstop = 4
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.softtabstop = 2
 vim.opt.expandtab = true
 vim.opt.autoindent = true
 vim.opt.copyindent = true
@@ -33,6 +32,10 @@ vim.opt.showmatch = true
 
 vim.keymap.set("n", "j", "gj")
 vim.keymap.set("n", "k", "gk")
+
+if vim.fn.has("win32") ~= 1 and vim.fn.has("wsl") ~= 1 then
+  vim.opt.clipboard = "unnamedplus"
+end
 
 -- Plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
