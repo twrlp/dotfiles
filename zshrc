@@ -18,3 +18,7 @@ PROMPT='%m:%c %# '
 
 # Alias-es
 alias please='sudo '
+if (( $+commands[nvim] )); then
+  alias vim='nvim'
+fi
+
