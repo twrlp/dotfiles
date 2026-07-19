@@ -139,6 +139,10 @@ require("lazy").setup({
 		lazy = false,
 	},
 	{
+		"nvim-treesitter/nvim-treesitter",
+		lazy = false,
+	},
+	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
@@ -234,6 +238,21 @@ require("lazy").setup({
 				"<leader>xQ",
 				"<cmd>Trouble qflist toggle<cr>",
 				desc = "Quickfix List (Trouble)",
+			},
+		},
+	},
+	{
+		"romus204/tree-sitter-manager.nvim",
+		opts = {
+			auto_install = true,
+			noauto_install = {
+				"c",
+				"lua",
+				"markdown",
+				"markdown_inline",
+				"query",
+				"vim",
+				"vimdoc",
 			},
 		},
 	},
