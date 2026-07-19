@@ -106,7 +106,10 @@ require("lazy").setup({
 	},
 	{
 		"nvim-telescope/telescope.nvim",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		},
 		cmd = "Telescope",
 		keys = {
 			{ "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
@@ -260,6 +263,7 @@ require("lazy").setup({
 
 -- LSP
 vim.lsp.config("lua_ls", {
+	root_markers = { ".luarc.json", ".git" },
 	settings = {
 		Lua = {
 			diagnostics = { globals = { "vim" } },
@@ -272,7 +276,7 @@ vim.lsp.config("basedpyright", {
 		basedpyright = {
 			disableOrganizeImports = true,
 			analysis = {
-				ignore = { "*" }, -- if Ruff handles diagnostics
+				ignore = { "*" },
 			},
 		},
 	},
