@@ -1,8 +1,8 @@
 [submodule "pack/themes/opt/dracula"]
-	path = vim/pack/themes/opt/dracula
+	path = vim/pack/themes/start/dracula
 	url = git@github.com:dracula/vim.git
 [submodule "pack/themes/opt/solarized8"]
-	path = vim/pack/themes/opt/solarized8
+	path = vim/pack/themes/start/solarized8
 	url = git@github.com:lifepillar/vim-solarized8.git
 [submodule "vim/pack/plugins/start/fzf"]
 	path = vim/pack/plugins/start/fzf
@@ -14,5 +14,8 @@
 	path = vim/pack/plugins/start/vim-lumen
 	url = https://github.com/vimpostor/vim-lumen.git
 [submodule "vim/pack/plugins/start/vim"]
-	path = vim/pack/plugins/start/vim
+	path = vim/pack/themes/start/vim
 	url = https://github.com/catppuccin/vim.git
+[submodule "vim/pack/themes/opt/quietlight.vim"]
+	path = vim/pack/themes/start/quietlight.vim
+	url = git@github.com:aonemd/quietlight.vim.git

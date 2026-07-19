@@ -1,16 +1,3 @@
-" ============================================================
-" Plugins (native vim 8 packages — see pack/plugins/start, pack/themes/opt)
-" ============================================================
-" Auto-loaded from pack/*/start: fzf, fzf.vim, vim-lumen, catppuccin.
-
-" ============================================================
-" Plugin settings
-" ============================================================
-let g:fzf_layout = { 'down': '40%' }
-
-" ============================================================
-" Settings
-" ============================================================
 set nocompatible
 filetype plugin indent on
 syntax on
@@ -19,10 +6,10 @@ set hidden
 set number
 set relativenumber
 set mouse=a
-if has('clipboard') | set clipboard=unnamed | endif
+if has('clipboard') | set clipboard=unnamedplus,unnamed | endif
 
 set undofile
-let s:undodir = expand('~/.cache/vim/undo')
+let s:undodir = expand('~/.vim/undo')
 if !isdirectory(s:undodir) | call mkdir(s:undodir, 'p') | endif
 let &undodir = s:undodir
 
@@ -55,9 +42,7 @@ set splitright
 set splitbelow
 set termguicolors
 
-" ============================================================
 " Keymaps
-" ============================================================
 nnoremap <Space> <nop>
 let mapleader=" "
 nnoremap j gj
@@ -66,24 +51,16 @@ nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fb :Buffers<CR>
 
-" ============================================================
-" Colors + system day/night
-" vim-lumen follows the OS light/dark (via the terminal) and sets &background,
-" firing these User events; we just pick the matching catppuccin flavour.
-" Cross-platform (macOS + Linux).
-" ============================================================
-function! s:ApplyTheme() abort
-  if &background ==# 'light'
-    silent! colorscheme catppuccin_latte
-  else
-    silent! colorscheme catppuccin_mocha
-  endif
-endfunction
-autocmd User LumenLight call s:ApplyTheme()
-autocmd User LumenDark  call s:ApplyTheme()
-autocmd VimEnter * call s:ApplyTheme()
+" Theme
+" function! s:ApplyLightTheme() abort
+"  if &background ==# 'light'
+    
+"  else
+    
+"  endif
+" endfunction
+" call s:ApplyTheme()
+autocmd User LumenLight silent! colorscheme catppuccin_latte
+autocmd User LumenDark  silent! colorscheme dracula
+"autocmd VimEnter * call s:ApplyTheme()
 
-" ============================================================
-" Machine-local extensions (base stays unaware of any local config)
-" ============================================================
-if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif
