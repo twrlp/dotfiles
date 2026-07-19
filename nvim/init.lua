@@ -69,10 +69,24 @@ require("lazy").setup({
 		priority = 1000,
 	},
 	{
+		"maxmx03/solarized.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {},
+		config = function(_, opts)
+			require("solarized").setup(opts)
+		end,
+	},
+	{
+		"HUAHUAI23/nvim-quietlight",
+		lazy = true,
+		opts = {},
+	},
+	{
 		"f-person/auto-dark-mode.nvim",
 		lazy = false,
 		priority = 900,
-		dependencies = { "catppuccin/nvim", "mofiqul/dracula.nvim" },
+		dependencies = { "maxmx03/solarized.nvim", "mofiqul/dracula.nvim" },
 		opts = {
 			update_interval = 3000,
 			set_dark_mode = function()
@@ -81,9 +95,14 @@ require("lazy").setup({
 			end,
 			set_light_mode = function()
 				vim.o.background = "light"
-				pcall(vim.cmd.colorscheme, "catppuccin-latte")
+				pcall(vim.cmd.colorscheme, "solarized")
 			end,
 		},
+	},
+	{
+		"nvimdev/hlsearch.nvim",
+		event = "BufRead",
+		opts = {},
 	},
 	{
 		"nvim-telescope/telescope.nvim",
@@ -134,9 +153,6 @@ require("lazy").setup({
 				desc = "Format buffer",
 			},
 		},
-		-- This will provide type hinting with LuaLS
-		---@module "conform"
-		---@type conform.setupOpts
 		opts = {
 			-- Define your formatters
 			formatters_by_ft = {
@@ -164,6 +180,14 @@ require("lazy").setup({
 		opts = {},
 	},
 	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = true,
+		opts = {
+			disable_filetype = { "TelescopePrompt" },
+		},
+	},
+	{
 		"NeogitOrg/neogit",
 		lazy = true,
 		dependencies = {
@@ -174,6 +198,43 @@ require("lazy").setup({
 		cmd = "Neogit",
 		keys = {
 			{ "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" },
+		},
+	},
+	{
+		"folke/trouble.nvim",
+		opts = {},
+		cmd = "Trouble",
+		keys = {
+			{
+				"<leader>xx",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				desc = "Buffer Diagnostics (Trouble)",
+			},
+			{
+				"<leader>cs",
+				"<cmd>Trouble symbols toggle focus=false<cr>",
+				desc = "Symbols (Trouble)",
+			},
+			{
+				"<leader>cl",
+				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+				desc = "LSP Definitions / references / ... (Trouble)",
+			},
+			{
+				"<leader>xL",
+				"<cmd>Trouble loclist toggle<cr>",
+				desc = "Location List (Trouble)",
+			},
+			{
+				"<leader>xQ",
+				"<cmd>Trouble qflist toggle<cr>",
+				desc = "Quickfix List (Trouble)",
+			},
 		},
 	},
 })
