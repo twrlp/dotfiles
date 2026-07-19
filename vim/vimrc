@@ -52,15 +52,15 @@ nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fb :Buffers<CR>
 
 " Theme
-" function! s:ApplyLightTheme() abort
-"  if &background ==# 'light'
-    
-"  else
-    
-"  endif
-" endfunction
-" call s:ApplyTheme()
-autocmd User LumenLight silent! colorscheme catppuccin_latte
-autocmd User LumenDark  silent! colorscheme dracula
-"autocmd VimEnter * call s:ApplyTheme()
+function! s:ApplyTheme() abort
+  if &background ==# 'light'
+    silent! colorscheme catppuccin_latte
+  else
+    silent! colorscheme dracula
+  endif
+endfunction
+
+autocmd User LumenLight call s:ApplyTheme()
+autocmd User LumenDark  call s:ApplyTheme()
+autocmd VimEnter *      call s:ApplyTheme()
 
