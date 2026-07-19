@@ -94,6 +94,11 @@ require("lazy").setup({
 			{ "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
 			{ "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Buffers" },
 			{ "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help tags" },
+			{ "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", desc = "Document symbols" },
+			{ "<leader>fS", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", desc = "Workspace symbols" },
+			{ "<leader>fr", "<cmd>Telescope lsp_references<CR>" },
+			{ "<leader>fi", "<cmd>Telescope lsp_implementations<CR>" },
+			{ "<leader>fd", "<cmd>Telescope diagnostics<CR>" },
 		},
 	},
 	{
@@ -145,11 +150,7 @@ require("lazy").setup({
 			-- Set up format-on-save
 			format_on_save = { timeout_ms = 500, lsp_fallback = true },
 			-- Customize formatters
-			formatters = {
-				shfmt = {
-					append_args = { "-i", "2" },
-				},
-			},
+			formatters = {},
 		},
 	},
 	{
@@ -161,6 +162,19 @@ require("lazy").setup({
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		opts = {},
+	},
+	{
+		"NeogitOrg/neogit",
+		lazy = true,
+		dependencies = {
+			"sindrets/diffview.nvim",
+			"m00qek/baleia.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		cmd = "Neogit",
+		keys = {
+			{ "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" },
+		},
 	},
 })
 
@@ -177,6 +191,9 @@ vim.lsp.config("basedpyright", {
 	settings = {
 		basedpyright = {
 			disableOrganizeImports = true,
+			analysis = {
+				ignore = { "*" }, -- if Ruff handles diagnostics
+			},
 		},
 	},
 })
@@ -188,8 +205,36 @@ vim.opt.completeopt = { "menuone", "noselect", "popup" }
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		local opts = { buffer = args.buf }
+
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+		vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
+
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+
+		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+
+		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+		vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+
 		if client and client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
 		end
 	end,
+})
+
+vim.diagnostic.config({
+	virtual_text = true,
+	underline = true,
+	signs = true,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = "if_many",
+	},
 })
