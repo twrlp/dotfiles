@@ -16,6 +16,7 @@ vim.opt.timeoutlen = 400
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.termguicolors = true
+vim.opt.winborder = "rounded"
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -142,13 +143,13 @@ require("lazy").setup({
 		lazy = false,
 	},
 	{
-		"ray-x/lsp_signature.nvim",
-		event = "InsertEnter",
+		"saghen/blink.cmp",
+		version = "1.*",
 		opts = {
-			bind = true,
-			handler_opts = {
-				border = "rounded",
-			},
+			keymap = { preset = "default" },
+			completion = { documentation = { auto_show = true } },
+			sources = { default = { "lsp", "path", "buffer" } },
+			signature = { enabled = true },
 		},
 	},
 	{
@@ -339,8 +340,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 		vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 
-		if client and client:supports_method("textDocument/completion") then
-			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+		if client and client:supports_method("textDocument/documentHighlight") then
+			local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+			vim.api.nvim_clear_autocmds({ group = group, buffer = args.buf })
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+				group = group,
+				buffer = args.buf,
+				callback = vim.lsp.buf.document_highlight,
+			})
+			vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+				group = group,
+				buffer = args.buf,
+				callback = vim.lsp.buf.clear_references,
+			})
 		end
 	end,
 })
