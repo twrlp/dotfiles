@@ -142,8 +142,41 @@ require("lazy").setup({
 		lazy = false,
 	},
 	{
+		"ray-x/lsp_signature.nvim",
+		event = "InsertEnter",
+		opts = {
+			bind = true,
+			handler_opts = {
+				border = "rounded",
+			},
+		},
+	},
+	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = false,
+		config = function()
+			-- tree-sitter-manager.nvim starts treesitter *highlighting* but not indent
+			-- or folds. Wire those here so the three stay consistent. Under treesitter
+			-- highlighting the legacy :syntax engine is off, so the built-in indent
+			-- scripts (GetRubyIndent, ...) return 0 (no indent after `def`/`{`); the
+			-- treesitter indentexpr reads the parse tree directly instead.
+			vim.opt.foldlevelstart = 99 -- open all folds when a file opens
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function(ev)
+					local lang = vim.treesitter.language.get_lang(ev.match)
+					if not (lang and vim.tbl_contains(require("nvim-treesitter").get_installed(), lang)) then
+						return
+					end
+					if vim.treesitter.query.get(lang, "indents") then
+						vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
+					if vim.treesitter.query.get(lang, "folds") then
+						vim.wo.foldmethod = "expr"
+						vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					end
+				end,
+			})
+		end,
 	},
 	{
 		"stevearc/conform.nvim",
