@@ -53,3 +53,19 @@ mkdir -p "$HOME/.config"
 link_config "$dotdir/nvim" "$HOME/.config/nvim"
 link_config "$dotdir/kitty" "$HOME/.config/kitty"
 link_config "$dotdir/vim" "$HOME/.vim"
+
+# Keep agent-owned directories writable and link only the shared entries.
+mkdir -p "$HOME/.agents/skills" "$HOME/.codex" "$HOME/.claude/skills"
+link_config "$dotdir/agents/AGENTS.md" "$HOME/.agents/AGENTS.md"
+if [ -L "$HOME/.agents/AGENTS.md" ] && [ "$(readlink "$HOME/.agents/AGENTS.md")" = "$dotdir/agents/AGENTS.md" ]; then
+  link_config "$HOME/.agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
+  link_config "$HOME/.agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+fi
+for skill in "$dotdir"/agents/skills/*; do
+  [ -f "$skill/SKILL.md" ] || continue
+  name=${skill##*/}
+  link_config "$skill" "$HOME/.agents/skills/$name"
+  if [ -L "$HOME/.agents/skills/$name" ] && [ "$(readlink "$HOME/.agents/skills/$name")" = "$skill" ]; then
+    link_config "$HOME/.agents/skills/$name" "$HOME/.claude/skills/$name"
+  fi
+done
