@@ -4,3 +4,5 @@ stylua
 ripgrep
 fzf
 fd
+mise
+uv
