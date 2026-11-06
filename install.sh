@@ -69,3 +69,28 @@ for skill in "$dotdir"/agents/skills/*; do
     link_config "$HOME/.agents/skills/$name" "$HOME/.claude/skills/$name"
   fi
 done
+
+# Share personal Herdr configuration without replacing machine-owned files.
+case "$(uname -s)" in
+  Darwin) herdr_keys=keys-macos.json ;;
+  Linux)  herdr_keys=keys-linux.json ;;
+  *)      herdr_keys= ;;
+esac
+if [ -n "$herdr_keys" ]; then
+  herdr_home="${HERDR_APP_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/herdr-app}"
+  mkdir -p "$herdr_home/layouts" "$herdr_home/mods"
+  link_config "$dotdir/herdr-app/$herdr_keys" "$herdr_home/keys.json"
+  link_config "$dotdir/herdr-app/layouts/mateo.json" "$herdr_home/layouts/mateo.json"
+  for mod in "$dotdir"/herdr-app/mods/*; do
+    [ -f "$mod/mod.json" ] || continue
+    link_config "$mod" "$herdr_home/mods/${mod##*/}"
+  done
+fi
+
+# Templates are shared individually so machine-local templates can coexist.
+core_templates="${XDG_CONFIG_HOME:-$HOME/.config}/herdr-core/templates"
+mkdir -p "$core_templates"
+for template in "$dotdir"/herdr-core/templates/*.md; do
+  [ -f "$template" ] || continue
+  link_config "$template" "$core_templates/${template##*/}"
+done
