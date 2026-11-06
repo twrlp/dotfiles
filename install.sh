@@ -46,6 +46,7 @@ link_config() {
   printf 'Linked %s\n' "$link"
 }
 
+add_source "$HOME/.zshenv" 'source ~/.dot/zshenv'
 add_source "$HOME/.zprofile" 'source ~/.dot/zprofile'
 add_source "$HOME/.zshrc" 'source ~/.dot/zshrc'
 mkdir -p "$HOME/.config"
