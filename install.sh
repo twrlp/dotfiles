@@ -46,6 +46,17 @@ link_config() {
   printf 'Linked %s\n' "$link"
 }
 
+unlink_repo_skill() {
+  name="$1"
+  target="$dotdir/agents/skills/$name"
+  for link in "$HOME/.agents/skills/$name" "$HOME/.claude/skills/$name"; do
+    if [ -L "$link" ] && [ "$(readlink "$link")" = "$target" ]; then
+      rm "$link"
+      printf 'Removed stale skill link %s\n' "$link"
+    fi
+  done
+}
+
 add_source "$HOME/.zshenv" 'source ~/.dot/zshenv'
 add_source "$HOME/.zprofile" 'source ~/.dot/zprofile'
 add_source "$HOME/.zshrc" 'source ~/.dot/zshrc'
@@ -69,6 +80,11 @@ for skill in "$dotdir"/agents/skills/*; do
     link_config "$HOME/.agents/skills/$name" "$HOME/.claude/skills/$name"
   fi
 done
+
+# Remove links for the custom skills retired from this checkout.
+unlink_repo_skill development-workflow
+unlink_repo_skill feature-planning
+unlink_repo_skill feature-review
 
 # Share personal Herdr configuration without replacing machine-owned files.
 case "$(uname -s)" in
