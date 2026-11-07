@@ -49,12 +49,29 @@ link_config() {
 unlink_repo_skill() {
   name="$1"
   target="$dotdir/agents/skills/$name"
-  for link in "$HOME/.agents/skills/$name" "$HOME/.claude/skills/$name"; do
-    if [ -L "$link" ] && [ "$(readlink "$link")" = "$target" ]; then
-      rm "$link"
-      printf 'Removed stale skill link %s\n' "$link"
+  agents_link="$HOME/.agents/skills/$name"
+  claude_link="$HOME/.claude/skills/$name"
+  if [ -L "$agents_link" ] && [ "$(readlink "$agents_link")" = "$target" ]; then
+    rm "$agents_link"
+    printf 'Removed stale skill link %s\n' "$agents_link"
+  fi
+  if [ -L "$claude_link" ]; then
+    claude_target=$(readlink "$claude_link")
+    if [ "$claude_target" = "$target" ] || [ "$claude_target" = "$agents_link" ] || [ "$claude_target" = "../../.agents/skills/$name" ]; then
+      rm "$claude_link"
+      printf 'Removed stale skill link %s\n' "$claude_link"
     fi
-  done
+  fi
+}
+
+unlink_repo_template() {
+  name="$1"
+  target="$dotdir/herdr-core/templates/$name"
+  link="${XDG_CONFIG_HOME:-$HOME/.config}/herdr-core/templates/$name"
+  if [ -L "$link" ] && [ "$(readlink "$link")" = "$target" ]; then
+    rm "$link"
+    printf 'Removed stale template link %s\n' "$link"
+  fi
 }
 
 add_source "$HOME/.zshenv" 'source ~/.dot/zshenv'
@@ -72,6 +89,12 @@ if [ -L "$HOME/.agents/AGENTS.md" ] && [ "$(readlink "$HOME/.agents/AGENTS.md")"
   link_config "$HOME/.agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
   link_config "$HOME/.agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 fi
+
+# Remove repo-managed links for skills retired from this checkout.
+unlink_repo_skill development-workflow
+unlink_repo_skill feature-planning
+unlink_repo_skill feature-review
+
 for skill in "$dotdir"/agents/skills/*; do
   [ -f "$skill/SKILL.md" ] || continue
   name=${skill##*/}
@@ -81,10 +104,12 @@ for skill in "$dotdir"/agents/skills/*; do
   fi
 done
 
-# Remove links for the custom skills retired from this checkout.
-unlink_repo_skill development-workflow
-unlink_repo_skill feature-planning
-unlink_repo_skill feature-review
+# Remove links for the Herdr Core templates retired from this checkout.
+unlink_repo_template docs-writer.md
+unlink_repo_template feature-owner.md
+unlink_repo_template implementer.md
+unlink_repo_template reviewer.md
+unlink_repo_template ux-validator.md
 
 # Share personal Herdr configuration without replacing machine-owned files.
 case "$(uname -s)" in
@@ -102,11 +127,3 @@ if [ -n "$herdr_keys" ]; then
     link_config "$mod" "$herdr_home/mods/${mod##*/}"
   done
 fi
-
-# Templates are shared individually so machine-local templates can coexist.
-core_templates="${XDG_CONFIG_HOME:-$HOME/.config}/herdr-core/templates"
-mkdir -p "$core_templates"
-for template in "$dotdir"/herdr-core/templates/*.md; do
-  [ -f "$template" ] || continue
-  link_config "$template" "$core_templates/${template##*/}"
-done

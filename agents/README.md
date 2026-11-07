@@ -1,13 +1,11 @@
 # Shared agent configuration
 
 `AGENTS.md` contains shared user-level instructions for Codex and Claude Code.
-`skills/` contains the custom skills shared by both agents.
 
 Run `~/.dot/install.sh` to link the instructions into `~/.agents`,
-`~/.codex/AGENTS.md`, and `~/.claude/CLAUDE.md`, and link each skill into
-`~/.agents/skills` and `~/.claude/skills`. The directories themselves remain
-separate, so other tools can install their own skills without adding them to
-this repository. Codex discovers the shared skills in `~/.agents/skills`.
+`~/.codex/AGENTS.md`, and `~/.claude/CLAUDE.md`. The installer removes only
+retired skill and template symlinks that point back into this checkout; it
+leaves other tools' files and links alone.
 
 The installer never replaces an existing path. If it reports a conflict,
 compare the existing content with the shared file or skill. After preserving
